@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
+    // THIS IS JUST A TEST COMMENT FOR LEARNING GITHUB
+
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private ViewPager mViewPager;
 
