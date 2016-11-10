@@ -11,6 +11,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     // THIS IS JUST A TEST COMMENT FOR LEARNING GITHUB
+    // SECOND TEST COMMENT
 
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private ViewPager mViewPager;
