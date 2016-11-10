@@ -65,6 +65,7 @@ public class ConnectFragment extends Fragment {
         // create adapter
         mPopupAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.select_dialog_item);
 
+        //TESTING COMMENT
         // add each device name and address to adapter
         for(BluetoothDevice device : mPairedDevices) {
             mPopupAdapter.add(device.getName() + "\n" + device.getAddress());
