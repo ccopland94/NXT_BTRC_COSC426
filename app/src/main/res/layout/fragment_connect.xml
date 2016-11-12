@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
@@ -10,4 +10,79 @@
         android:layout_height="wrap_content"
         android:text="Connect"/>
 
-</FrameLayout>
+    <TextView
+        android:text="Status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_connectStatus"
+        android:layout_below="@+id/BTN_connect"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="169dp" />
+
+    <Button
+        android:text="Disconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnDisconnect"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_progBar"
+        android:max="100"
+        android:progress="20"
+        android:progressTint="@color/colorAccent"
+        android:layout_below="@+id/vv_connectStatus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:id="@+id/textView" />
+
+    <Button
+        android:text="Forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnDrive"
+        android:layout_below="@+id/vv_progBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
+
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnBack"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignLeft="@+id/vv_btnDrive"
+        android:layout_alignStart="@+id/vv_btnDrive" />
+
+    <Button
+        android:text="Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/vv_btnBack"
+        android:layout_toRightOf="@+id/vv_progBar"
+        android:layout_toEndOf="@+id/vv_progBar"
+        android:id="@+id/vv_btnRight" />
+
+    <Button
+        android:text="Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnLeft"
+        android:layout_alignBaseline="@+id/vv_btnBack"
+        android:layout_alignBottom="@+id/vv_btnBack"
+        android:layout_toLeftOf="@+id/vv_progBar"
+        android:layout_toStartOf="@+id/vv_progBar" />
+
+</RelativeLayout>
