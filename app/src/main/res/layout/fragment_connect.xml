@@ -48,41 +48,4 @@
         android:layout_marginBottom="75dp"
         android:id="@+id/textView" />
 
-    <Button
-        android:text="Forward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vv_btnDrive"
-        android:layout_below="@+id/vv_progBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
-
-    <Button
-        android:text="Back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vv_btnBack"
-        android:layout_alignBottom="@+id/textView"
-        android:layout_alignLeft="@+id/vv_btnDrive"
-        android:layout_alignStart="@+id/vv_btnDrive" />
-
-    <Button
-        android:text="Right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/vv_btnBack"
-        android:layout_toRightOf="@+id/vv_progBar"
-        android:layout_toEndOf="@+id/vv_progBar"
-        android:id="@+id/vv_btnRight" />
-
-    <Button
-        android:text="Left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vv_btnLeft"
-        android:layout_alignBaseline="@+id/vv_btnBack"
-        android:layout_alignBottom="@+id/vv_btnBack"
-        android:layout_toLeftOf="@+id/vv_progBar"
-        android:layout_toStartOf="@+id/vv_progBar" />
-
 </RelativeLayout>
