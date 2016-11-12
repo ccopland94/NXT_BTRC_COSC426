@@ -1,13 +1,53 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.group.nxt_btrc_group_cosc426.DriveFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+    <Button
+        android:text="Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/vv_btnBack"
+        android:layout_toLeftOf="@+id/vv_btnBack"
+        android:layout_toStartOf="@+id/vv_btnBack"
+        android:id="@+id/vv_btnLeft" />
 
-</FrameLayout>
+    <Button
+        android:text="Forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnDrive"
+        android:layout_marginTop="71dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnBack"
+        android:layout_below="@+id/vv_btnDrive"
+        android:layout_alignLeft="@+id/vv_btnDrive"
+        android:layout_alignStart="@+id/vv_btnDrive" />
+
+    <Button
+        android:text="Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/vv_btnBack"
+        android:layout_toRightOf="@+id/vv_btnBack"
+        android:layout_toEndOf="@+id/vv_btnBack"
+        android:id="@+id/vv_btnRight" />
+
+    <SeekBar
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vv_btnBack"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:id="@+id/vv_sbDrivePower"
+        android:layout_width="250dp"
+        android:max="100"
+        android:progress="75" />
+
+</RelativeLayout>
