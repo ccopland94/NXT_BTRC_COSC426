@@ -70,4 +70,12 @@
         android:layout_alignStart="@+id/vv_connectStatus"
         android:textColor="@android:color/darker_gray" />
 
+    <TextView
+        android:text="Battery Info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_tvBatteryVolt"
+        android:layout_below="@+id/vv_progBar"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

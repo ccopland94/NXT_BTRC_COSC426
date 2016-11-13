@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     BluetoothDevice cv_bd;
     final String CV_ROBOTNAME = "NXT";
     static ConnectFragment cv_connectView;
+
+    byte battery1;
+    byte battery2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +112,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         cv_is = cv_socket.getInputStream();
                         cv_os = cv_socket.getOutputStream();
+                        readBattery();
+                        getInput();
                         cv_connectView.changeText(cv_bd.getName(), true);
-                        //cv_connectStatus.setText("Connect to " + cv_bd.getName() + " at " + cv_bd.getAddress());
+                        cv_connectView.changeBattery(Integer.toString((battery1 & 0xff))+" "+Integer.toString((battery2 & 0xff)));
                     } catch (Exception e) {
                         cf_disconnectNXT();
                         cv_connectView.changeText("Device", false);
@@ -176,6 +182,37 @@ public class MainActivity extends AppCompatActivity {
             buffer[12] = 0;
             buffer[13] = 0;
             buffer[14] = 0;
+
+            cv_os.write(buffer);
+            cv_os.flush();
+        }
+        catch (Exception e) {
+            //cv_connectStatus.setText("Error in MoveForward(" + e.getMessage() + ")");
+        }
+    }
+
+    public void getInput() {
+        byte[] buffer = new byte[1024];
+        int bytes = 0;
+        while (bytes < 7) {
+            try {
+                bytes = cv_is.read(buffer);
+            } catch (IOException e) {
+                break;
+            }
+        }
+        battery1 = buffer[5];
+        battery2 = buffer[6];
+    }
+
+    public void readBattery() {
+        try {
+            byte[] buffer = new byte[4];
+
+            buffer[0] = (byte) (4-2);			//length lsb
+            buffer[1] = 0;						// length msb
+            buffer[2] =  0;						// direct command (with response)
+            buffer[3] = 0x0B;					// set output state
 
             cv_os.write(buffer);
             cv_os.flush();

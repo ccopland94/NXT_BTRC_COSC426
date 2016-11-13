@@ -25,6 +25,7 @@ public class ConnectFragment extends Fragment {
     private ArrayList<BluetoothDevice> mBluetoothList;
     TextView cv_connectStatus;
     TextView cv_cStatus;
+    TextView cv_battery;
     ImageView cv_btImage;
     Button cv_btnDisconnect;
     Button mBTNconnect;
@@ -50,6 +51,7 @@ public class ConnectFragment extends Fragment {
 
         cv_connectStatus = (TextView) view.findViewById(R.id.vv_connectStatus);
         cv_cStatus = (TextView)view.findViewById(R.id.vv_cStatus);
+        cv_battery = (TextView)view.findViewById(R.id.vv_tvBatteryVolt);
 
         mBTNconnect = (Button) view.findViewById(R.id.BTN_connect);
         cv_btnDisconnect = (Button) view.findViewById(R.id.vv_btnDisconnect);
@@ -136,5 +138,10 @@ public class ConnectFragment extends Fragment {
             cv_cStatus.setTextColor(getResources().getColor(android.R.color.darker_gray));
             cv_btImage.setImageResource(R.drawable.bluetoothoff);
         }
+    }
+
+    public void changeBattery(String info)
+    {
+        cv_battery.setText(info);
     }
 }
