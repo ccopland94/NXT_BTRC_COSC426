@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket cv_socket;
     BluetoothDevice cv_bd;
     final String CV_ROBOTNAME = "NXT";
+    static ConnectFragment cv_connectView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return new DriveFragment();
-                case 1: return new ConnectFragment();
+                case 1:
+                    cv_connectView = new ConnectFragment();
+                    return cv_connectView;
                 default: return null;
             }
         }
@@ -105,9 +108,11 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         cv_is = cv_socket.getInputStream();
                         cv_os = cv_socket.getOutputStream();
+                        cv_connectView.changeText(cv_bd.getName(), true);
                         //cv_connectStatus.setText("Connect to " + cv_bd.getName() + " at " + cv_bd.getAddress());
                     } catch (Exception e) {
                         cf_disconnectNXT();
+                        cv_connectView.changeText("Device", false);
                         cv_is = null;
                         cv_os = null;
                     }
@@ -130,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
                     cv_socket = cv_bd.createRfcommSocketToServiceRecord(
                             java.util.UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
                     cv_socket.connect();
+                    cv_connectView.changeText(cv_bd.getName(), true);
                 }
                 catch (Exception e) {
-                    //cv_connectStatus.setText("Error interacting with remote device [" +
-                            //e.getMessage() + "]");
+                    cv_connectView.changeText("Device", false);
                 }
             }
         }
@@ -146,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             cv_socket.close();
             cv_is.close();
             cv_os.close();
-            //cv_connectStatus.setText(cv_bd.getName() + " is disconnect " );
+            cv_connectView.changeText("Device", false);
         } catch (Exception e) {
             //cv_connectStatus.setText("Error in disconnect -> " + e.getMessage());
         }
