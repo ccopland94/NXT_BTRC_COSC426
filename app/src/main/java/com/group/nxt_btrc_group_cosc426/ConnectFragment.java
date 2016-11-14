@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ public class ConnectFragment extends Fragment {
     private ArrayList<BluetoothDevice> mBluetoothList;
     TextView cv_connectStatus;
     TextView cv_cStatus;
+    TextView cv_battery;
     ImageView cv_btImage;
+    ProgressBar cv_pbbattery;
     Button cv_btnDisconnect;
     Button mBTNconnect;
 
@@ -50,11 +53,13 @@ public class ConnectFragment extends Fragment {
 
         cv_connectStatus = (TextView) view.findViewById(R.id.vv_connectStatus);
         cv_cStatus = (TextView)view.findViewById(R.id.vv_cStatus);
+        cv_battery = (TextView)view.findViewById(R.id.vv_tvBatteryVolt);
 
         mBTNconnect = (Button) view.findViewById(R.id.BTN_connect);
         cv_btnDisconnect = (Button) view.findViewById(R.id.vv_btnDisconnect);
         cv_btImage = (ImageView) view.findViewById(R.id.vv_imgConnect);
 
+        cv_pbbattery = (ProgressBar) view.findViewById(R.id.vv_progBar);
         mBTNconnect.setEnabled(true);
         cv_btnDisconnect.setEnabled(false);
 
@@ -135,6 +140,17 @@ public class ConnectFragment extends Fragment {
             cv_connectStatus.setTextColor(getResources().getColor(android.R.color.darker_gray));
             cv_cStatus.setTextColor(getResources().getColor(android.R.color.darker_gray));
             cv_btImage.setImageResource(R.drawable.bluetoothoff);
+        }
+    }
+
+    public void changeBattery(String info, boolean connected)
+    {
+        if(connected) {
+            cv_battery.setText(info+" mV");
+            cv_pbbattery.setProgress(Integer.parseInt(info));
+        } else {
+            cv_battery.setText(info);
+            cv_pbbattery.setProgress(3000);
         }
     }
 }

@@ -39,8 +39,8 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_height="wrap_content"
         android:id="@+id/vv_progBar"
-        android:max="100"
-        android:progress="20"
+        android:max="9000"
+        android:progress="3000"
         android:progressTint="@color/colorAccent"
         android:layout_marginTop="69dp"
         android:layout_below="@+id/vv_imgConnect"
@@ -69,5 +69,13 @@
         android:layout_alignLeft="@+id/vv_connectStatus"
         android:layout_alignStart="@+id/vv_connectStatus"
         android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:text="Battery Info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_tvBatteryVolt"
+        android:layout_below="@+id/vv_progBar"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
