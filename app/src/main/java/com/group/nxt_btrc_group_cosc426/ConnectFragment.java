@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ConnectFragment extends Fragment {
     TextView cv_cStatus;
     TextView cv_battery;
     ImageView cv_btImage;
+    ProgressBar cv_pbbattery;
     Button cv_btnDisconnect;
     Button mBTNconnect;
 
@@ -57,6 +59,7 @@ public class ConnectFragment extends Fragment {
         cv_btnDisconnect = (Button) view.findViewById(R.id.vv_btnDisconnect);
         cv_btImage = (ImageView) view.findViewById(R.id.vv_imgConnect);
 
+        cv_pbbattery = (ProgressBar) view.findViewById(R.id.vv_progBar);
         mBTNconnect.setEnabled(true);
         cv_btnDisconnect.setEnabled(false);
 
@@ -140,8 +143,14 @@ public class ConnectFragment extends Fragment {
         }
     }
 
-    public void changeBattery(String info)
+    public void changeBattery(String info, boolean connected)
     {
-        cv_battery.setText(info);
+        if(connected) {
+            cv_battery.setText(info+" mV");
+            cv_pbbattery.setProgress(Integer.parseInt(info));
+        } else {
+            cv_battery.setText(info);
+            cv_pbbattery.setProgress(3000);
+        }
     }
 }

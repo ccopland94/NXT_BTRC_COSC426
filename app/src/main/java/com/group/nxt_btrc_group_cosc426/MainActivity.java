@@ -115,10 +115,12 @@ public class MainActivity extends AppCompatActivity {
                         readBattery();
                         getInput();
                         cv_connectView.changeText(cv_bd.getName(), true);
-                        cv_connectView.changeBattery(Integer.toString((battery1 & 0xff))+" "+Integer.toString((battery2 & 0xff)));
+                        int var = (battery1 | (battery2<<8));
+                        cv_connectView.changeBattery(Integer.toString(var), true);
                     } catch (Exception e) {
                         cf_disconnectNXT();
                         cv_connectView.changeText("Device", false);
+                        cv_connectView.changeBattery("Battery Info", false);
                         cv_is = null;
                         cv_os = null;
                     }
@@ -145,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception e) {
                     cv_connectView.changeText("Device", false);
+                    cv_connectView.changeBattery("Battery Info", false);
                 }
             }
         }
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             cv_is.close();
             cv_os.close();
             cv_connectView.changeText("Device", false);
+            cv_connectView.changeBattery("Battery Info", false);
         } catch (Exception e) {
             //cv_connectStatus.setText("Error in disconnect -> " + e.getMessage());
         }
