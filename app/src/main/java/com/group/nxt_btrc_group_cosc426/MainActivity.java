@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private ViewPager mViewPager;
+    private boolean connected;
 
     // Detect BT connection status
     private BroadcastReceiver cv_btMonitor = null;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     BluetoothDevice cv_bd;
     final String CV_ROBOTNAME = "NXT";
     static ConnectFragment cv_connectView;
+    static DriveFragment cv_driveView;
 
     byte battery1;
     byte battery2;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
         mViewPager = (ViewPager) findViewById(R.id.VP_viewpager);
         mViewPager.setAdapter(mMyFragmentPagerAdapter);
-        mViewPager.setCurrentItem(1); // Connect page
+        mViewPager.setCurrentItem(0); // Connect page
         cf_setupBTMonitor();
     }
 
@@ -67,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return "Drive";
-                case 1: return "Connect";
+                case 0: return "Connect";
+                case 1: return "Drive";
                 default: return null;
             }
         }
@@ -76,8 +79,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return new DriveFragment();
                 case 1:
+                    cv_driveView = new DriveFragment();
+                    return cv_driveView;
+                case 0:
                     cv_connectView = new ConnectFragment();
                     return cv_connectView;
                 default: return null;
@@ -115,19 +120,20 @@ public class MainActivity extends AppCompatActivity {
                         readBattery();
                         getInput();
                         cv_connectView.changeText(cv_bd.getName(), true);
-                        int var = (battery1 | (battery2<<8));
+                        int var = ((battery1 & 0xff) | ((battery2 & 0xff)<<8));
                         cv_connectView.changeBattery(Integer.toString(var), true);
+                        cv_driveView.enableInputs(true);
                     } catch (Exception e) {
                         cf_disconnectNXT();
                         cv_connectView.changeText("Device", false);
                         cv_connectView.changeBattery("Battery Info", false);
+                        cv_driveView.enableInputs(false);
                         cv_is = null;
                         cv_os = null;
                     }
                 }
                 if (intent.getAction().equals(
                         "android.bluetooth.device.action.ACL_DISCONNECTED")) {
-                    //cv_connectStatus.setText("Connection is broken");
                 }
             }
         };
@@ -148,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
                 catch (Exception e) {
                     cv_connectView.changeText("Device", false);
                     cv_connectView.changeBattery("Battery Info", false);
+                    cv_driveView.enableInputs(false);
                 }
             }
         }
         catch (Exception e) {
-            // cv_tvHello.setText("Failed in findRobot() " + e.getMessage());
         }
     }
     public void cf_disconnectNXT() {
@@ -162,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
             cv_os.close();
             cv_connectView.changeText("Device", false);
             cv_connectView.changeBattery("Battery Info", false);
+            cv_driveView.enableInputs(false);
         } catch (Exception e) {
-            //cv_connectStatus.setText("Error in disconnect -> " + e.getMessage());
         }
     }
 
@@ -207,6 +213,8 @@ public class MainActivity extends AppCompatActivity {
         }
         battery1 = buffer[5];
         battery2 = buffer[6];
+        Log.d("Battery bit 1", Byte.toString(battery1));
+        Log.d("Battery bit 2", Byte.toString(battery2));
     }
 
     public void readBattery() {
@@ -222,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             cv_os.flush();
         }
         catch (Exception e) {
-            //cv_connectStatus.setText("Error in MoveForward(" + e.getMessage() + ")");
+
         }
     }
 }
