@@ -63,7 +63,6 @@ public class ConnectFragment extends Fragment {
         mBTNconnect.setEnabled(true);
         cv_btnDisconnect.setEnabled(false);
 
-        //cf_setupBTMonitor();
         mBTNconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,15 +77,18 @@ public class ConnectFragment extends Fragment {
                 //disconnect robot from device
                 ((MainActivity)getActivity()).cf_disconnectNXT();
 
-                //enable connect, disable disconnect
-                mBTNconnect.setEnabled(true);
-                cv_btnDisconnect.setEnabled(false);
             }
         });
 
         return view;
     }
 
+    public void toggleEnableButtons(boolean flag)
+    {
+        mBTNconnect.setEnabled(!flag);
+        cv_btnDisconnect.setEnabled(flag);
+    }
+    //popup dialog
     private Dialog buildDialog() {
 
         final ArrayAdapter<String> mPopupAdapter;
@@ -117,7 +119,7 @@ public class ConnectFragment extends Fragment {
                         //Toast.makeText(getContext(),cv_bd.getAddress(),Toast.LENGTH_SHORT).show();
 
                         //connect the NXT (bind it to the bluetooth connection)
-                        ((MainActivity)getActivity()).cf_connectNXT();
+                        ((MainActivity)getActivity()).connectNXT();
 
                         //disable connect, enable disconnect
                         mBTNconnect.setEnabled(false);
@@ -127,6 +129,7 @@ public class ConnectFragment extends Fragment {
         return builder.create();
     }
 
+    //change text
     public void changeText(String name, boolean connected)
     {
         cv_connectStatus.setText(name);
@@ -143,6 +146,7 @@ public class ConnectFragment extends Fragment {
         }
     }
 
+    //change battery information
     public void changeBattery(String info, boolean connected)
     {
         if(connected) {

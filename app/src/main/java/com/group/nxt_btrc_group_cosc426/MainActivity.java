@@ -6,21 +6,34 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
+
+/**
+ * 11/14/16
+ * Group Project NXT Submission - Part 2
+ * COSC 426
+ *
+ * Cameron Copland
+ * Ryan Speck
+ * Connor Krupa
+ * Joshua Kreider
+ */
 public class MainActivity extends AppCompatActivity {
-
-    // THIS IS JUST A TEST COMMENT FOR LEARNING GITHUB
-    // SECOND TEST COMMENT
 
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private ViewPager mViewPager;
@@ -37,10 +50,17 @@ public class MainActivity extends AppCompatActivity {
     BluetoothDevice cv_bd;
     final String CV_ROBOTNAME = "NXT";
     static ConnectFragment cv_connectView;
+    static DriveFragment cv_driveView;
+    static SingFragment cv_singView;
+    static TiltFragment cv_tiltView;
 
     byte battery1;
     byte battery2;
 
+    RobotBattery battery;
+    RobotConnect asyncConnect;
+
+    //creates activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +68,18 @@ public class MainActivity extends AppCompatActivity {
 
         mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
         mViewPager = (ViewPager) findViewById(R.id.VP_viewpager);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mMyFragmentPagerAdapter);
-        mViewPager.setCurrentItem(1); // Connect page
+        mViewPager.setCurrentItem(0); // Connect page
         cf_setupBTMonitor();
     }
 
+    //pager adapter
     private static class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
         Context mContext;
 
-        private static int NUM_ITEMS = 2;
+        private static int NUM_ITEMS = 4;
 
         public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
@@ -67,8 +89,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return "Drive";
-                case 1: return "Connect";
+                case 0: return "Connect";
+                case 1: return "Drive";
+                case 2: return "Sing";
+                case 3: return "Tilt Control";
                 default: return null;
             }
         }
@@ -76,10 +100,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return new DriveFragment();
                 case 1:
+                    cv_driveView = new DriveFragment();
+                    return cv_driveView;
+                case 0:
                     cv_connectView = new ConnectFragment();
                     return cv_connectView;
+                case 2:
+                    cv_singView = new SingFragment();
+                    return cv_singView;
+                case 3:
+                    cv_tiltView = new TiltFragment();
+                    return cv_tiltView;
                 default: return null;
             }
         }
@@ -103,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(cv_btMonitor);
     }
 
+    //bluetooth monitor
     private void cf_setupBTMonitor() {
         cv_btMonitor = new BroadcastReceiver() {
             @Override
@@ -112,30 +145,30 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         cv_is = cv_socket.getInputStream();
                         cv_os = cv_socket.getOutputStream();
-                        readBattery();
-                        getInput();
-                        cv_connectView.changeText(cv_bd.getName(), true);
-                        int var = (battery1 | (battery2<<8));
-                        cv_connectView.changeBattery(Integer.toString(var), true);
+                        battery = new RobotBattery();
+                        battery.execute();
                     } catch (Exception e) {
                         cf_disconnectNXT();
-                        cv_connectView.changeText("Device", false);
-                        cv_connectView.changeBattery("Battery Info", false);
                         cv_is = null;
                         cv_os = null;
                     }
                 }
                 if (intent.getAction().equals(
                         "android.bluetooth.device.action.ACL_DISCONNECTED")) {
-                    //cv_connectStatus.setText("Connection is broken");
+                    cf_disconnectNXT();
+                    cv_is = null;
+                    cv_os = null;
                 }
             }
         };
     }
+    //sets the device
     public void setDevice(BluetoothDevice device)
     {
         this.cv_bd = device;
     }
+
+    //connects the NXT
     public void cf_connectNXT() {
         try	{
             if (cv_bd.getName().equalsIgnoreCase(CV_ROBOTNAME)) {
@@ -148,25 +181,34 @@ public class MainActivity extends AppCompatActivity {
                 catch (Exception e) {
                     cv_connectView.changeText("Device", false);
                     cv_connectView.changeBattery("Battery Info", false);
+                    cv_connectView.toggleEnableButtons(false);
+                    cv_driveView.enableInputs(false);
+                    cv_tiltView.enableInputs(false);
                 }
             }
         }
         catch (Exception e) {
-            // cv_tvHello.setText("Failed in findRobot() " + e.getMessage());
         }
     }
+
+    //disconnect NXT
     public void cf_disconnectNXT() {
         try {
             cv_socket.close();
             cv_is.close();
             cv_os.close();
+            battery.cancel(true);
             cv_connectView.changeText("Device", false);
             cv_connectView.changeBattery("Battery Info", false);
+            cv_connectView.toggleEnableButtons(false);
+            cv_driveView.enableInputs(false);
+            cv_tiltView.enableInputs(false);
+
         } catch (Exception e) {
-            //cv_connectStatus.setText("Error in disconnect -> " + e.getMessage());
         }
     }
 
+    //move the NXT motor
     public void cf_moveMotor(int motor,int speed, int state) {
         try {
             byte[] buffer = new byte[15];
@@ -195,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //get input from robot
     public void getInput() {
         byte[] buffer = new byte[1024];
         int bytes = 0;
@@ -207,22 +250,98 @@ public class MainActivity extends AppCompatActivity {
         }
         battery1 = buffer[5];
         battery2 = buffer[6];
+        //Log.d("Battery bit 1", Byte.toString(battery1));
+        //Log.d("Battery bit 2", Byte.toString(battery2));
     }
 
+    //send battery command
     public void readBattery() {
         try {
             byte[] buffer = new byte[4];
 
             buffer[0] = (byte) (4-2);			//length lsb
             buffer[1] = 0;						// length msb
-            buffer[2] =  0;						// direct command (with response)
+            buffer[2] = 0;						// direct command (with response)
             buffer[3] = 0x0B;					// set output state
 
             cv_os.write(buffer);
             cv_os.flush();
         }
         catch (Exception e) {
+
+        }
+    }
+
+    public void changeBattery(int batteryLvl)
+    {
+        cv_connectView.changeText(cv_bd.getName(), true);
+        cv_connectView.changeBattery(Integer.toString(batteryLvl), true);
+        cv_driveView.enableInputs(true);
+        cv_tiltView.enableInputs(true);
+    }
+
+    public void playTone(int hZ)
+    {
+        try {
+            byte[] buffer = new byte[8];
+
+            buffer[0] = (byte) (8-2);			//length lsb
+            buffer[1] = 0;						// length msb
+            buffer[2] =  (byte)0x80;			// direct command (with response)
+            buffer[3] = 0x03;					// command
+            buffer[4] = (byte) 500;	        // uword pt 1
+            buffer[5] = (byte) 0x00;		// uword pt 2
+            buffer[6] = (byte) battery1;				// uword pt 1
+            buffer[7] = (byte) battery2;              // uword pt 2
+
+            Log.d("Byte String: ", Byte.toString(buffer[4]));
+            cv_os.write(buffer);
+            cv_os.flush();
+        }
+        catch (Exception e) {
             //cv_connectStatus.setText("Error in MoveForward(" + e.getMessage() + ")");
+        }
+    }
+
+    public void connectNXT()
+    {
+        asyncConnect = new RobotConnect();
+        asyncConnect.execute();
+    }
+    public class RobotBattery extends AsyncTask<Object, Object, Object>
+    {
+        int var = 0;
+        @Override
+        protected Object doInBackground(Object... objects) {
+
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    readBattery();
+                    getInput();
+                    var = ((battery1 & 0xff) | ((battery2 & 0xff)<<8));
+                    publishProgress();
+                }
+            }, 0, 60000);
+            //checks battery every 1 minute (doesn't stop...)
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... objects)
+        {
+            changeBattery(var);
+        }
+    }
+
+    public class RobotConnect extends AsyncTask<Object, Object, Object>
+    {
+        @Override
+        protected Object doInBackground(Object... objects) {
+            cf_connectNXT();
+            return null;
         }
     }
 }
