@@ -11,10 +11,6 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +20,7 @@ public class DriveFragment extends Fragment {
     View fragView;
     TextView cv_tvdrivePower;
     TextView cv_tvCpower;
+
     Button cv_btnDrive;
     Button cv_btnLeft;
     Button cv_btnRight;
@@ -33,6 +30,7 @@ public class DriveFragment extends Fragment {
 
     SeekBar cv_sbDrivePower;
     SeekBar cv_sbCpower;
+
     int drivePower;
     int cPower;
 
@@ -84,7 +82,7 @@ public class DriveFragment extends Fragment {
                     ((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x00);
                     toggleInputs(true, view);
                 }
-                return true;
+                return false;
             }
         });
 
@@ -101,7 +99,7 @@ public class DriveFragment extends Fragment {
                     ((MainActivity)getActivity()).cf_moveMotor(1, -drivePower, 0x00);
                     toggleInputs(true, view);
                 }
-                return true;
+                return false;
             }
         });
 
@@ -118,7 +116,7 @@ public class DriveFragment extends Fragment {
                     ((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x00);
                     toggleInputs(true, view);
                 }
-                return true;
+                return false;
             }
         });
 
@@ -207,6 +205,7 @@ public class DriveFragment extends Fragment {
         return view;
     }
 
+    //toggle inputs on or off
     private void toggleInputs(boolean value, View callingView)
     {
         int[] buttons = {R.id.vv_btnBack, R.id.vv_btnDrive, R.id.vv_btnLeft, R.id.vv_btnRight, R.id.vv_btnCup, R.id.vv_btnCdown};
@@ -221,6 +220,7 @@ public class DriveFragment extends Fragment {
         cv_sbCpower.setEnabled(value);
     }
 
+    //enable/disable inputs
     public void enableInputs(boolean value)
     {
         int[] buttons = {R.id.vv_btnBack, R.id.vv_btnDrive, R.id.vv_btnLeft, R.id.vv_btnRight, R.id.vv_btnCup, R.id.vv_btnCdown};
