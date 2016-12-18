@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     static DriveFragment cv_driveView;
     static SingFragment cv_singView;
     static TiltFragment cv_tiltView;
+    static PollFragment cv_pollView;
 
     byte battery1;
     byte battery2;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
         mViewPager = (ViewPager) findViewById(R.id.VP_viewpager);
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(mMyFragmentPagerAdapter);
         mViewPager.setCurrentItem(0); // Connect page
         cf_setupBTMonitor();
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         Context mContext;
 
-        private static int NUM_ITEMS = 4;
+        private static int NUM_ITEMS = 5;
 
         public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1: return "Drive";
                 case 2: return "Sing";
                 case 3: return "Tilt Control";
+                case 4: return "Poll";
                 default: return null;
             }
         }
@@ -112,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
                 case 3:
                     cv_tiltView = new TiltFragment();
                     return cv_tiltView;
+                case 4:
+                    cv_pollView = new PollFragment();
+                    return cv_pollView;
                 default: return null;
             }
         }
