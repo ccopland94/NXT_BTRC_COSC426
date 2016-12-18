@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     RobotConnect asyncConnect;
     RobotDisconnect asyncDisconnect;
     RobotSing asyncSing;
+    RobotMute asyncMute;
 
     //creates activity
     @Override
@@ -287,6 +288,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void playTone(int hZ)
     {
+        byte hZ1 = (byte)(hZ & 0xff);
+        hZ = hZ >> 8;
+        byte hZ2 = (byte)(hZ & 0xff);
+        int length = 100000;
+        byte l1 = (byte)(length & 0xff);
+        length = length >> 8;
+        byte l2 = (byte)(length & 0xff);
         try {
             byte[] buffer = new byte[8];
 
@@ -294,12 +302,30 @@ public class MainActivity extends AppCompatActivity {
             buffer[1] = 0;						// length msb
             buffer[2] =  (byte)0x80;			// direct command (with response)
             buffer[3] = 0x03;					// command
-            buffer[4] = (byte) hZ;	        // uword pt 1
-            buffer[5] = (byte) 0x00;		// uword pt 2
-            buffer[6] = (byte) battery1;				// uword pt 1
-            buffer[7] = (byte) battery2;              // uword pt 2
+            buffer[4] = hZ1;	        // uword pt 1
+            buffer[5] = hZ2;		// uword pt 2
+            buffer[6] = l1;				// uword pt 1
+            buffer[7] = l2;              // uword pt 2
 
             Log.d("Byte String: ", Byte.toString(buffer[4]));
+            cv_os.write(buffer);
+            cv_os.flush();
+        }
+        catch (Exception e) {
+            //cv_connectStatus.setText("Error in MoveForward(" + e.getMessage() + ")");
+        }
+    }
+
+    public void stopTone()
+    {
+        try {
+            byte[] buffer = new byte[4];
+
+            buffer[0] = (byte) (4-2);			//length lsb
+            buffer[1] = 0;						// length msb
+            buffer[2] =  (byte)0x80;			// direct command (with no response)
+            buffer[3] = 0x0C;					// command
+
             cv_os.write(buffer);
             cv_os.flush();
         }
@@ -323,6 +349,12 @@ public class MainActivity extends AppCompatActivity {
     {
         asyncSing = new RobotSing();
         asyncSing.execute(hz);
+    }
+
+    public void muteNXT()
+    {
+        asyncMute = new RobotMute();
+        asyncMute.execute();
     }
     public class RobotBattery extends AsyncTask<Object, Object, Object>
     {
@@ -383,6 +415,15 @@ public class MainActivity extends AppCompatActivity {
             {
                 playTone(integers[0]);
             }
+            return null;
+        }
+    }
+
+    public class RobotMute extends AsyncTask <Integer, Object, Object>
+    {
+        @Override
+        protected Object doInBackground(Integer... integers) {
+            stopTone();
             return null;
         }
     }

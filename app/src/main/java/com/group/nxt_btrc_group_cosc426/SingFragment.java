@@ -23,6 +23,10 @@ public class SingFragment extends Fragment {
     Button cv_btnSing2;
     Button cv_btnSing3;
     Button cv_btnSing4;
+    Button cv_btnSingAny;
+    SeekBar cv_sbSingHz;
+
+    TextView cv_tvhZ;
 
     public SingFragment() {
         // Required empty public constructor
@@ -40,6 +44,9 @@ public class SingFragment extends Fragment {
         cv_btnSing2 = (Button) view.findViewById(R.id.vv_btnSing2);
         cv_btnSing3 = (Button) view.findViewById(R.id.vv_btnSing3);
         cv_btnSing4 = (Button) view.findViewById(R.id.vv_btnSing4);
+        cv_btnSingAny = (Button) view.findViewById(R.id.vv_btnSingAny);
+        cv_sbSingHz = (SeekBar) view.findViewById(R.id.vv_sbSingHz);
+        cv_tvhZ = (TextView) view.findViewById(R.id.vv_tvHz);
 
         cv_btnSing1.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -50,6 +57,7 @@ public class SingFragment extends Fragment {
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
+                    ((MainActivity)getActivity()).muteNXT();
                 }
                 return false;
             }
@@ -60,10 +68,11 @@ public class SingFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    ((MainActivity)getActivity()).singNXT(1000);
+                    ((MainActivity)getActivity()).singNXT(1175);
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
+                    ((MainActivity)getActivity()).muteNXT();
                 }
                 return false;
             }
@@ -74,10 +83,11 @@ public class SingFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    ((MainActivity)getActivity()).singNXT(750);
+                    ((MainActivity)getActivity()).singNXT(880);
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
+                    ((MainActivity)getActivity()).muteNXT();
                 }
                 return false;
             }
@@ -88,12 +98,48 @@ public class SingFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    ((MainActivity)getActivity()).singNXT(500);
+                    ((MainActivity)getActivity()).singNXT(784);
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
+                    ((MainActivity)getActivity()).muteNXT();
                 }
                 return false;
+            }
+        });
+
+        cv_btnSingAny.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int hZ = cv_sbSingHz.getProgress();
+                hZ = hZ+200; //increase floor of hZ
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    ((MainActivity)getActivity()).singNXT(hZ);
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    ((MainActivity)getActivity()).muteNXT();
+                }
+                return false;
+            }
+        });
+
+        cv_sbSingHz.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                cv_tvhZ.setText((progress+200)+" hZ");
             }
         });
 
@@ -103,7 +149,7 @@ public class SingFragment extends Fragment {
     //enable/disable inputs
     public void enableInputs(boolean value)
     {
-        int[] buttons = {R.id.vv_btnSing1, R.id.vv_btnSing2, R.id.vv_btnSing3, R.id.vv_btnSing4};
+        int[] buttons = {R.id.vv_btnSing1, R.id.vv_btnSing2, R.id.vv_btnSing3, R.id.vv_btnSing4, R.id.vv_btnSingAny};
         for(int i=0; i < buttons.length; i++)
         {
             fragView.findViewById(buttons[i]).setEnabled(value);

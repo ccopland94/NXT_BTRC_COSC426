@@ -5,43 +5,78 @@
              tools:context="com.group.nxt_btrc_group_cosc426.DriveFragment">
 
     <Button
-        android:text="Tone Low"
+        android:text="High G"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vv_btnSing1"
-        android:layout_marginTop="97dp"
         android:textSize="14sp"
+        android:enabled="false"
+        android:layout_marginTop="47dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:enabled="false" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="99dp"
+        android:layout_marginEnd="99dp" />
 
     <Button
-        android:text="Tone Med"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vv_btnSing2"
-        android:layout_below="@+id/vv_btnSing1"
-        android:layout_alignLeft="@+id/vv_btnSing1"
-        android:layout_alignStart="@+id/vv_btnSing1"
-        android:enabled="false" />
-
-    <Button
-        android:text="Tone Med-high"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vv_btnSing3"
-        android:layout_below="@+id/vv_btnSing2"
-        android:layout_centerHorizontal="true"
-        android:enabled="false" />
-
-    <Button
-        android:text="Tone High"
+        android:text="Low G"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vv_btnSing4"
-        android:layout_below="@+id/vv_btnSing3"
-        android:layout_alignLeft="@+id/vv_btnSing2"
-        android:layout_alignStart="@+id/vv_btnSing2"
+        android:enabled="false"
+        android:layout_alignBaseline="@+id/vv_btnSing1"
+        android:layout_alignBottom="@+id/vv_btnSing1"
+        android:layout_toLeftOf="@+id/vv_btnSing1"
+        android:layout_toStartOf="@+id/vv_btnSing1" />
+
+    <Button
+        android:text="D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnSing2"
+        android:enabled="false"
+        android:layout_alignBaseline="@+id/vv_btnSing3"
+        android:layout_alignBottom="@+id/vv_btnSing3"
+        android:layout_toLeftOf="@+id/vv_btnSing3"
+        android:layout_toStartOf="@+id/vv_btnSing3" />
+
+    <Button
+        android:text="A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnSing3"
+        android:enabled="false"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/vv_btnSing1"
+        android:layout_toRightOf="@+id/vv_btnSing4"
+        android:layout_toEndOf="@+id/vv_btnSing4" />
+
+    <Button
+        android:text="Any"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_btnSingAny"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:enabled="false" />
+
+    <SeekBar
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vv_btnSingAny"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp"
+        android:id="@+id/vv_sbSingHz"
+        android:layout_width="250dp"
+        android:max="2000"
+        android:progress="0" />
+
+    <TextView
+        android:text="200 hZ"
+        android:layout_height="wrap_content"
+        android:id="@+id/vv_tvHz"
+        android:layout_alignTop="@+id/vv_sbSingHz"
+        android:layout_toRightOf="@+id/vv_sbSingHz"
+        android:layout_toEndOf="@+id/vv_sbSingHz"
+        android:layout_width="60dp" />
 
 </RelativeLayout>
