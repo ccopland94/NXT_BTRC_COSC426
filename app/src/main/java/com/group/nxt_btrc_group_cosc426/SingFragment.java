@@ -19,7 +19,10 @@ public class SingFragment extends Fragment {
 
     View fragView;
 
-    Button cv_btnSing;
+    Button cv_btnSing1;
+    Button cv_btnSing2;
+    Button cv_btnSing3;
+    Button cv_btnSing4;
 
     public SingFragment() {
         // Required empty public constructor
@@ -33,21 +36,62 @@ public class SingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sing, container, false);
         fragView = view;
 
-        cv_btnSing = (Button) view.findViewById(R.id.vv_btnSing);
+        cv_btnSing1 = (Button) view.findViewById(R.id.vv_btnSing1);
+        cv_btnSing2 = (Button) view.findViewById(R.id.vv_btnSing2);
+        cv_btnSing3 = (Button) view.findViewById(R.id.vv_btnSing3);
+        cv_btnSing4 = (Button) view.findViewById(R.id.vv_btnSing4);
 
-        cv_btnSing.setOnTouchListener(new View.OnTouchListener() {
+        cv_btnSing1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    ((MainActivity)getActivity()).playTone(1568);
-                    //toggleInputs(false, view);
+                    ((MainActivity)getActivity()).singNXT(1568);
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
-                    //((MainActivity)getActivity()).cf_moveMotor(0, drivePower, 0x00);
-                    //((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x00);
-                    //toggleInputs(true, view);
+                }
+                return false;
+            }
+        });
+
+        cv_btnSing2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    ((MainActivity)getActivity()).singNXT(1000);
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                }
+                return false;
+            }
+        });
+
+        cv_btnSing3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    ((MainActivity)getActivity()).singNXT(750);
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                }
+                return false;
+            }
+        });
+
+        cv_btnSing4.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    ((MainActivity)getActivity()).singNXT(500);
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
                 }
                 return false;
             }
@@ -56,30 +100,13 @@ public class SingFragment extends Fragment {
         return view;
     }
 
-    //toggle inputs on or off
-    /*private void toggleInputs(boolean value, View callingView)
-    {
-        int[] buttons = {R.id.vv_btnBack, R.id.vv_btnDrive, R.id.vv_btnLeft, R.id.vv_btnRight, R.id.vv_btnCup, R.id.vv_btnCdown};
-        for(int i=0; i < buttons.length; i++)
-        {
-            if(callingView.getId() != buttons[i])
-            {
-                fragView.findViewById(buttons[i]).setEnabled(value);
-            }
-        }
-        cv_sbDrivePower.setEnabled(value);
-        cv_sbCpower.setEnabled(value);
-    }
-
     //enable/disable inputs
     public void enableInputs(boolean value)
     {
-        int[] buttons = {R.id.vv_btnBack, R.id.vv_btnDrive, R.id.vv_btnLeft, R.id.vv_btnRight, R.id.vv_btnCup, R.id.vv_btnCdown};
+        int[] buttons = {R.id.vv_btnSing1, R.id.vv_btnSing2, R.id.vv_btnSing3, R.id.vv_btnSing4};
         for(int i=0; i < buttons.length; i++)
         {
             fragView.findViewById(buttons[i]).setEnabled(value);
         }
-        cv_sbDrivePower.setEnabled(value);
-        cv_sbCpower.setEnabled(value);
-    }*/
+    }
 }

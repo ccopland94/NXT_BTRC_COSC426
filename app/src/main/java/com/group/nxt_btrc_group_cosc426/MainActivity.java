@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     RobotBattery battery;
     RobotConnect asyncConnect;
+    RobotDisconnect asyncDisconnect;
+    RobotSing asyncSing;
 
     //creates activity
     @Override
@@ -186,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
                 catch (Exception e) {
                     cv_connectView.changeText("Device", false);
                     cv_connectView.changeBattery("Battery Info", false);
-                    cv_connectView.toggleEnableButtons(false);
                     cv_driveView.enableInputs(false);
                     cv_tiltView.enableInputs(false);
+                    cv_singView.enableInputs(false);
                 }
             }
         }
@@ -205,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
             battery.cancel(true);
             cv_connectView.changeText("Device", false);
             cv_connectView.changeBattery("Battery Info", false);
-            cv_connectView.toggleEnableButtons(false);
             cv_driveView.enableInputs(false);
             cv_tiltView.enableInputs(false);
+            cv_singView.enableInputs(false);
 
         } catch (Exception e) {
         }
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             buffer[5] = (byte) speed;			// power
             buffer[6] = 1 + 2;					// motor on + brake between PWM
             buffer[7] = 0;						// regulation
-            buffer[8] = 0;						// turn ration??
+            buffer[8] = 0;						// turn ratio??
             buffer[9] = (byte) state; //0x20;					// run state
             buffer[10] = 0;
             buffer[11] = 0;
@@ -246,15 +248,17 @@ public class MainActivity extends AppCompatActivity {
     public void getInput() {
         byte[] buffer = new byte[1024];
         int bytes = 0;
-        while (bytes < 7) {
-            try {
-                bytes = cv_is.read(buffer);
-            } catch (IOException e) {
-                break;
+        if(cv_is != null) {
+            while (bytes < 7) {
+                try {
+                    bytes = cv_is.read(buffer);
+                } catch (IOException e) {
+                    break;
+                }
             }
+            battery1 = buffer[5];
+            battery2 = buffer[6];
         }
-        battery1 = buffer[5];
-        battery2 = buffer[6];
         //Log.d("Battery bit 1", Byte.toString(battery1));
         //Log.d("Battery bit 2", Byte.toString(battery2));
     }
@@ -283,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
         cv_connectView.changeBattery(Integer.toString(batteryLvl), true);
         cv_driveView.enableInputs(true);
         cv_tiltView.enableInputs(true);
+        cv_singView.enableInputs(true);
     }
 
     public void playTone(int hZ)
@@ -294,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
             buffer[1] = 0;						// length msb
             buffer[2] =  (byte)0x80;			// direct command (with response)
             buffer[3] = 0x03;					// command
-            buffer[4] = (byte) 500;	        // uword pt 1
+            buffer[4] = (byte) hZ;	        // uword pt 1
             buffer[5] = (byte) 0x00;		// uword pt 2
             buffer[6] = (byte) battery1;				// uword pt 1
             buffer[7] = (byte) battery2;              // uword pt 2
@@ -313,13 +318,23 @@ public class MainActivity extends AppCompatActivity {
         asyncConnect = new RobotConnect();
         asyncConnect.execute();
     }
+
+    public void disconnectNXT()
+    {
+        asyncDisconnect = new RobotDisconnect();
+        asyncDisconnect.execute();
+    }
+    public void singNXT(int hz)
+    {
+        asyncSing = new RobotSing();
+        asyncSing.execute(hz);
+    }
     public class RobotBattery extends AsyncTask<Object, Object, Object>
     {
+        Timer timer = new Timer();
         int var = 0;
         @Override
         protected Object doInBackground(Object... objects) {
-
-            Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
@@ -329,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
                     publishProgress();
                 }
             }, 0, 60000);
-            //checks battery every 1 minute (doesn't stop...)
+            //checks battery every 1 minute
 
             return null;
         }
@@ -339,6 +354,12 @@ public class MainActivity extends AppCompatActivity {
         {
             changeBattery(var);
         }
+
+        @Override
+        protected void onCancelled()
+        {
+            timer.cancel();
+        }
     }
 
     public class RobotConnect extends AsyncTask<Object, Object, Object>
@@ -346,6 +367,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object... objects) {
             cf_connectNXT();
+            return null;
+        }
+    }
+
+    public class RobotDisconnect extends AsyncTask<Object, Object, Object>
+    {
+        @Override
+        protected Object doInBackground(Object... objects) {
+            cf_disconnectNXT();
+            return null;
+        }
+    }
+
+    public class RobotSing extends AsyncTask <Integer, Object, Object>
+    {
+        @Override
+        protected Object doInBackground(Integer... integers) {
+            if(integers[0] != null)
+            {
+                playTone(integers[0]);
+            }
             return null;
         }
     }
