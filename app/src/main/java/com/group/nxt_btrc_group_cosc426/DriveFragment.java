@@ -72,14 +72,12 @@ public class DriveFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, drivePower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, drivePower, 0x20, 1, drivePower, 0x20);
                     toggleInputs(false, view);
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, drivePower, 0x00);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x00);
+                    ((MainActivity)getActivity()).driveNXT(0, drivePower, 0x00, 1, drivePower, 0x00);
                     toggleInputs(true, view);
                 }
                 return false;
@@ -90,13 +88,11 @@ public class DriveFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, drivePower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, -drivePower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, drivePower, 0x20, 1, -drivePower, 0x20);
                     toggleInputs(false, view);
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, drivePower, 0x00);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, -drivePower, 0x00);
+                    ((MainActivity)getActivity()).driveNXT(0, drivePower, 0x00, 1, -drivePower, 0x00);
                     toggleInputs(true, view);
                 }
                 return false;
@@ -107,13 +103,11 @@ public class DriveFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, -drivePower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, -drivePower, 0x20, 1, drivePower, 0x20);
                     toggleInputs(false, view);
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, -drivePower, 0x00);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, drivePower, 0x00);
+                    ((MainActivity)getActivity()).driveNXT(0, -drivePower, 0x00, 1, drivePower, 0x00);
                     toggleInputs(true, view);
                 }
                 return false;
@@ -124,13 +118,11 @@ public class DriveFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, -drivePower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, -drivePower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, -drivePower, 0x20, 1, -drivePower, 0x20);
                     toggleInputs(false, view);
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ((MainActivity)getActivity()).cf_moveMotor(0, -drivePower, 0x00);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, -drivePower, 0x00);
+                    ((MainActivity)getActivity()).driveNXT(0, -drivePower, 0x00, 1, -drivePower, 0x00);
                     toggleInputs(true, view);
                 }
                 return false;
@@ -141,11 +133,11 @@ public class DriveFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    ((MainActivity)getActivity()).cf_moveMotor(2, cPower, 0x20);
+                    ((MainActivity)getActivity()).driveNXTOneMotor(2, cPower, 0x20);
                     toggleInputs(false, view);
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ((MainActivity)getActivity()).cf_moveMotor(2, cPower, 0x00);
+                    ((MainActivity)getActivity()).driveNXTOneMotor(2, cPower, 0x00);
                     toggleInputs(true, view);
                 }
                 return false;
@@ -156,11 +148,11 @@ public class DriveFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    ((MainActivity)getActivity()).cf_moveMotor(2, -cPower, 0x20);
+                    ((MainActivity)getActivity()).driveNXTOneMotor(2, -cPower, 0x20);
                     toggleInputs(false, view);
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ((MainActivity)getActivity()).cf_moveMotor(2, -cPower, 0x00);
+                    ((MainActivity)getActivity()).driveNXTOneMotor(2, -cPower, 0x00);
                     toggleInputs(true, view);
                 }
                 return false;
