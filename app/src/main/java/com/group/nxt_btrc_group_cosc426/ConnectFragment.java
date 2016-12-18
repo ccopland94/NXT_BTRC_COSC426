@@ -75,7 +75,7 @@ public class ConnectFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //disconnect robot from device
-                ((MainActivity)getActivity()).cf_disconnectNXT();
+                ((MainActivity)getActivity()).disconnectNXT();
 
             }
         });
@@ -83,11 +83,6 @@ public class ConnectFragment extends Fragment {
         return view;
     }
 
-    public void toggleEnableButtons(boolean flag)
-    {
-        mBTNconnect.setEnabled(!flag);
-        cv_btnDisconnect.setEnabled(flag);
-    }
     //popup dialog
     private Dialog buildDialog() {
 
@@ -115,15 +110,8 @@ public class ConnectFragment extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //Set the bluetooth device in main activity to robot
                         ((MainActivity)getActivity()).setDevice(mBluetoothList.get(i));
-
-                        //Toast.makeText(getContext(),cv_bd.getAddress(),Toast.LENGTH_SHORT).show();
-
                         //connect the NXT (bind it to the bluetooth connection)
                         ((MainActivity)getActivity()).connectNXT();
-
-                        //disable connect, enable disconnect
-                        mBTNconnect.setEnabled(false);
-                        cv_btnDisconnect.setEnabled(true);
                     }
                 });
         return builder.create();
@@ -138,11 +126,15 @@ public class ConnectFragment extends Fragment {
             cv_connectStatus.setTextColor(getResources().getColor(R.color.orange));
             cv_cStatus.setTextColor(getResources().getColor(android.R.color.black));
             cv_btImage.setImageResource(R.drawable.bluetoothon);
+            mBTNconnect.setEnabled(false);
+            cv_btnDisconnect.setEnabled(true);
         } else {
             cv_cStatus.setText("Not Connected");
             cv_connectStatus.setTextColor(getResources().getColor(android.R.color.darker_gray));
             cv_cStatus.setTextColor(getResources().getColor(android.R.color.darker_gray));
             cv_btImage.setImageResource(R.drawable.bluetoothoff);
+            mBTNconnect.setEnabled(true);
+            cv_btnDisconnect.setEnabled(false);
         }
     }
 

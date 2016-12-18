@@ -14,8 +14,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -29,8 +32,9 @@ public class TiltFragment extends Fragment implements SensorEventListener {
 
     Button cv_btnActivate;
 
-    TextView cv_tvTest;
-    TextView cv_tvReadings;
+    ImageView cv_ivArrow;
+
+    ProgressBar cv_pbTiltPower;
 
     float[] startVals = {-9999, -9999, -9999};
 
@@ -52,8 +56,9 @@ public class TiltFragment extends Fragment implements SensorEventListener {
         fragView = view;
 
         //cv_tvTest = (TextView) view.findViewById(R.id.vv_test);
-        cv_tvReadings = (TextView) view.findViewById(R.id.vv_tvReadings);
         cv_btnActivate = (Button) view.findViewById(R.id.vv_btnActivate);
+        cv_ivArrow = (ImageView) view.findViewById(R.id.vv_imgArrow);
+        cv_pbTiltPower = (ProgressBar) view.findViewById(R.id.vv_pbTiltPower);
 
         cv_btnActivate.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -65,9 +70,10 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
                     startMovement = false;
-                    cv_tvReadings.setText("STOPPED");
                     ((MainActivity)getActivity()).cf_moveMotor(0, 25, 0x00);
                     ((MainActivity)getActivity()).cf_moveMotor(1, 25, 0x00);
+                    cv_ivArrow.setImageResource(R.drawable.circle);
+                    cv_pbTiltPower.setProgress(0);
                 }
                 return false;
             }
@@ -99,50 +105,52 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                 startVals[1] = y;
                 startVals[2] = z;
             }
-            //cv_tvTest.setText("Start: x:"+startVals[0]+", y:"+startVals[1]);
-            //cv_tvReadings.setText("Current: x:"+x+", y:"+y);
 
             try {
                 if (startMovement == false) return;
-                StringBuilder sb = new StringBuilder();
-                sb.append("[" + event.values[0] + "]");
-                sb.append("[" + event.values[1] + "]");
-                sb.append("[" + event.values[2] + "]");
                 int motorPower = 0;
-                //cv_tvReadings.setText(sb.toString());
                 // process this sensor data
                 if (event.values[1] < (startVals[1] - ySensitivity)) {
                     motorPower = (int)Math.floor(Math.abs(event.values[1]-startVals[1]));
                     if(motorPower > 10) motorPower = 10;
                     motorPower = motorPower *10;
+                    cv_pbTiltPower.setProgress(motorPower);
                     ((MainActivity)getActivity()).cf_moveMotor(0, motorPower, 0x20);
                     ((MainActivity)getActivity()).cf_moveMotor(1, motorPower, 0x20);
-                    cv_tvReadings.setText("MOVE FORWARD");
+                    cv_ivArrow.setImageResource(R.drawable.arrow_right);
+                    cv_ivArrow.setRotation(-90);
                 } else if (event.values[1] > (startVals[1] + ySensitivity)) {
                     motorPower = (int)Math.floor(Math.abs(event.values[1]-startVals[1]));
                     if(motorPower > 10) motorPower = 10;
                     motorPower = motorPower *10;
+                    cv_pbTiltPower.setProgress(motorPower);
                     ((MainActivity)getActivity()).cf_moveMotor(0, -motorPower, 0x20);
                     ((MainActivity)getActivity()).cf_moveMotor(1, -motorPower, 0x20);
-                    cv_tvReadings.setText("MOVE BACK");
+                    cv_ivArrow.setImageResource(R.drawable.arrow_right);
+                    cv_ivArrow.setRotation(90);
                 } else if (event.values[0] >(startVals[0] + xSensitivity)) {
                     motorPower = (int)Math.floor(Math.abs(event.values[0]-startVals[0]));
-                    if(motorPower > 20) motorPower = 20;
-                    motorPower = motorPower *5;
+                    if(motorPower > 10) motorPower = 10;
+                    motorPower = motorPower *10;
+                    cv_pbTiltPower.setProgress(motorPower);
                     ((MainActivity)getActivity()).cf_moveMotor(0, motorPower, 0x20);
                     ((MainActivity)getActivity()).cf_moveMotor(1, -motorPower, 0x20);
-                    cv_tvReadings.setText("MOVE LEFT");
+                    cv_ivArrow.setImageResource(R.drawable.arrow_right);
+                    cv_ivArrow.setRotation(-180);
                 } else if (event.values[0] < (startVals[0] - xSensitivity)) {
                     motorPower = (int)Math.floor(Math.abs(event.values[0]-startVals[0]));
-                    if(motorPower > 20) motorPower = 20;
-                    motorPower = motorPower *5;
+                    if(motorPower > 10) motorPower = 10;
+                    motorPower = motorPower *10;
+                    cv_pbTiltPower.setProgress(motorPower);
                     ((MainActivity)getActivity()).cf_moveMotor(0, -motorPower, 0x20);
                     ((MainActivity)getActivity()).cf_moveMotor(1, motorPower, 0x20);
-                    cv_tvReadings.setText("MOVE RIGHT");
+                    cv_ivArrow.setImageResource(R.drawable.arrow_right);
+                    cv_ivArrow.setRotation(0);
                 } else {
-                    cv_tvReadings.setText("STOPPED");
+                    cv_pbTiltPower.setProgress(0);
                     ((MainActivity)getActivity()).cf_moveMotor(0, 0, 0x00);
                     ((MainActivity)getActivity()).cf_moveMotor(1, 0, 0x00);
+                    cv_ivArrow.setImageResource(R.drawable.circle);
                 }
             } catch (Exception e) {
                 Log.e("ERROR:","onSensorChanged Error::" + e.getMessage());

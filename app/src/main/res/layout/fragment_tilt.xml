@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.group.nxt_btrc_group_cosc426.DriveFragment">
@@ -16,12 +17,26 @@
         android:elevation="0dp"
         android:layout_height="100dp" />
 
-    <TextView
-        android:text="Stopped"
+    <ImageView
+        app:srcCompat="@drawable/circle"
+        android:id="@+id/vv_imgArrow"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:rotation="-90" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/vv_tvReadings"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/vv_imgArrow"
+        android:id="@+id/vv_pbTiltPower"
+        android:layout_alignLeft="@+id/vv_btnActivate"
+        android:layout_alignStart="@+id/vv_btnActivate"
+        android:layout_alignRight="@+id/vv_btnActivate"
+        android:layout_alignEnd="@+id/vv_btnActivate"
+        android:max="100"
+        android:progress="0" />
 
 </RelativeLayout>
