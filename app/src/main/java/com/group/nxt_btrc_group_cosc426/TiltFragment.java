@@ -70,8 +70,7 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
                     startMovement = false;
-                    ((MainActivity)getActivity()).cf_moveMotor(0, 25, 0x00);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, 25, 0x00);
+                    ((MainActivity)getActivity()).driveNXT(0, 0, 0x00, 1, 0, 0x00);
                     cv_ivArrow.setImageResource(R.drawable.circle);
                     cv_pbTiltPower.setProgress(0);
                 }
@@ -101,9 +100,9 @@ public class TiltFragment extends Fragment implements SensorEventListener {
             //set initial values if not set
             if(startVals[0] == -9999)
             {
-                startVals[0] = x;
-                startVals[1] = y;
-                startVals[2] = z;
+                startVals[0] = 0;
+                startVals[1] = 0;
+                startVals[2] = 0;
             }
 
             try {
@@ -115,8 +114,7 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                     if(motorPower > 10) motorPower = 10;
                     motorPower = motorPower *10;
                     cv_pbTiltPower.setProgress(motorPower);
-                    ((MainActivity)getActivity()).cf_moveMotor(0, motorPower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, motorPower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, motorPower, 0x20, 1, motorPower, 0x20);
                     cv_ivArrow.setImageResource(R.drawable.arrow_right);
                     cv_ivArrow.setRotation(-90);
                 } else if (event.values[1] > (startVals[1] + ySensitivity)) {
@@ -124,8 +122,7 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                     if(motorPower > 10) motorPower = 10;
                     motorPower = motorPower *10;
                     cv_pbTiltPower.setProgress(motorPower);
-                    ((MainActivity)getActivity()).cf_moveMotor(0, -motorPower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, -motorPower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, -motorPower, 0x20, 1, -motorPower, 0x20);
                     cv_ivArrow.setImageResource(R.drawable.arrow_right);
                     cv_ivArrow.setRotation(90);
                 } else if (event.values[0] >(startVals[0] + xSensitivity)) {
@@ -133,8 +130,7 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                     if(motorPower > 10) motorPower = 10;
                     motorPower = motorPower *10;
                     cv_pbTiltPower.setProgress(motorPower);
-                    ((MainActivity)getActivity()).cf_moveMotor(0, motorPower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, -motorPower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, motorPower, 0x20, 1, -motorPower, 0x20);
                     cv_ivArrow.setImageResource(R.drawable.arrow_right);
                     cv_ivArrow.setRotation(-180);
                 } else if (event.values[0] < (startVals[0] - xSensitivity)) {
@@ -142,14 +138,12 @@ public class TiltFragment extends Fragment implements SensorEventListener {
                     if(motorPower > 10) motorPower = 10;
                     motorPower = motorPower *10;
                     cv_pbTiltPower.setProgress(motorPower);
-                    ((MainActivity)getActivity()).cf_moveMotor(0, -motorPower, 0x20);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, motorPower, 0x20);
+                    ((MainActivity)getActivity()).driveNXT(0, -motorPower, 0x20, 1, motorPower, 0x20);
                     cv_ivArrow.setImageResource(R.drawable.arrow_right);
                     cv_ivArrow.setRotation(0);
                 } else {
                     cv_pbTiltPower.setProgress(0);
-                    ((MainActivity)getActivity()).cf_moveMotor(0, 0, 0x00);
-                    ((MainActivity)getActivity()).cf_moveMotor(1, 0, 0x00);
+                    ((MainActivity)getActivity()).driveNXT(0, 0, 0x00, 1, 0, 0x00);
                     cv_ivArrow.setImageResource(R.drawable.circle);
                 }
             } catch (Exception e) {

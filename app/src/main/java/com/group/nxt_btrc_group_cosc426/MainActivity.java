@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     RobotDisconnect asyncDisconnect;
     RobotSing asyncSing;
     RobotMute asyncMute;
+    RobotDrive asyncDrive;
 
     //creates activity
     @Override
@@ -356,6 +357,16 @@ public class MainActivity extends AppCompatActivity {
         asyncMute = new RobotMute();
         asyncMute.execute();
     }
+    public void driveNXT(int motor1, int speed1, int state1, int motor2, int speed2, int state2)
+    {
+        asyncDrive = new RobotDrive();
+        asyncDrive.execute(motor1, speed1, state1, motor2, speed2, state2);
+    }
+    public void driveNXTOneMotor(int motor1, int speed1, int state1)
+    {
+        asyncDrive = new RobotDrive();
+        asyncDrive.execute(motor1, speed1, state1);
+    }
     public class RobotBattery extends AsyncTask<Object, Object, Object>
     {
         Timer timer = new Timer();
@@ -424,6 +435,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Integer... integers) {
             stopTone();
+            return null;
+        }
+    }
+
+    public class RobotDrive extends AsyncTask<Integer, Object, Object>
+    {
+        @Override
+        protected Object doInBackground(Integer... integers) {
+            if(integers.length > 3) {
+                cf_moveMotor(integers[0], integers[1], integers[2]);
+                cf_moveMotor(integers[3], integers[4], integers[5]);
+            } else if (integers.length > 0 && integers.length <= 3)
+            {
+                cf_moveMotor(integers[0], integers[1], integers[2]);
+            }
             return null;
         }
     }
