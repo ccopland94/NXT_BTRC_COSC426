@@ -18,6 +18,8 @@ public class Sensor {
             draw_icon = R.drawable.nxt_touch_120;
         } else if (sensor_type == 3) {
             draw_icon = R.drawable.nxt_distance_120;
+        } else if (sensor_type == 4) {
+            draw_icon = R.drawable.nxt_servo_120;
         } else {
             // INVALID
         }

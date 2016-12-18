@@ -1,14 +1,32 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+              android:orientation="vertical"
              tools:context="com.group.nxt_btrc_group_cosc426.PollFragment">
 
     <ListView
         android:id="@+id/vv_sensor_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:layout_weight=".8">
     </ListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_resetServos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Reset Servos"/>
+        <Button
+            android:id="@+id/btn_resetSensors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/btn_resetServos"
+            android:text="Reset Sensors"/>
+    </RelativeLayout>
 
-</FrameLayout>
+</LinearLayout>
